@@ -14,5 +14,41 @@
 <% for (const js in htmlWebpackPlugin.files.js) { %>
 <script inline type="text/javascript" src="<%= htmlWebpackPlugin.files.js[js] %>"></script>
 <% } %>
+<script>
+    /**
+     * Core function to inject commands into xterm.js
+     * @param {string} text - The command string to execute
+     */
+    function sendCommand(text) {
+        // Attempt to grab the xterm instance from the DOM
+        const termEl = window.term || (window.term = document.querySelector('.terminal')?.xterm);
+
+        if (!termEl) {
+            console.error("Error: xterm instance not found.");
+            return;
+        }
+
+        // Simulate user input by firing data events character by character
+        // This triggers ttyd's internal WebSocket to send data to the backend
+        for (let char of (text)) {
+            termEl._core._onData.fire(char);
+        }
+    }
+
+    /**
+     * Listener for postMessage from the Parent Window (the page containing the iframe)
+     */
+    window.addEventListener('message', function(event) {
+        // Security Tip: It is highly recommended to check the origin
+        // if (event.origin !== "https://your-app-domain.com") return;
+
+        const data = event.data;
+
+        // Expecting format: { type: 'INPUT', text: 'your-command' }
+        if (data && data.type === 'INPUT' && data.text) {
+            sendCommand(data.text);
+        }
+    }, false);
+</script>
 </body>
 </html>

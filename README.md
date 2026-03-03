@@ -13,6 +13,7 @@ ttyd is a simple command-line tool for sharing terminal over the web.
 
 # Features
 
+- (new) Adds a lightweight postMessage bridge to inject commands from a parent window into the embedded xterm.js terminal in ttyd (send {type: 'INPUT', text: '…'} to simulate user input).
 - Built on top of [libuv](https://libuv.org) and [WebGL2](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API) for speed
 - Fully-featured terminal with [CJK](https://en.wikipedia.org/wiki/CJK_characters) and IME support
 - [ZMODEM](https://en.wikipedia.org/wiki/ZMODEM) ([lrzsz](https://ohse.de/uwe/software/lrzsz.html)) / [trzsz](https://trzsz.github.io) file transfer support
